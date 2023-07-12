@@ -432,3 +432,57 @@ copyinstr(pagetable_t pagetable, char *dst, uint64 srcva, uint64 max)
     return -1;
   }
 }
+
+void vmprint_process(pagetable_t pagetable, int level)
+{
+  for (int i = 0; i < 512; i++)
+  {
+    pte_t pte = pagetable[i];
+    if ((pte & PTE_V) && (pte & (PTE_R | PTE_W | PTE_X)) == 0)   // the validity of page,the set of three flag 
+    {
+      uint64 child = PTE2PA(pte);
+      switch (level)
+      {
+      case 0:
+        printf("..");
+        break;
+      case 1:
+        printf(".. ..");
+        break;
+      case 2:
+        printf(".. .. ..");
+        break;
+      default:
+        break;
+      }
+      printf("%d: pte %p pa %p\n", i, pte, child);
+      vmprint_process((pagetable_t)child, level + 1);  // Recursive call to print the lower-level page table.
+    }
+    else if (pte & PTE_V)                           // deal with the leaf node
+    {
+      uint64 pa = PTE2PA(pte);
+      switch (level)
+      {
+      case 0:
+        printf("..");
+        break;
+      case 1:
+        printf(".. ..");
+        break;
+      case 2:
+        printf(".. .. ..");
+        break;
+      default:
+        break;
+      }
+      printf("%d: pte %p pa %p\n", i, pte, pa);
+    }
+  }
+}
+
+
+void vmprint(pagetable_t pagetable)
+{
+  printf("page table %p\n",pagetable);
+  vmprint_process(pagetable,0);
+}
