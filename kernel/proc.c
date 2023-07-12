@@ -288,10 +288,10 @@ fork(void)
     return -1;
   }
   np->sz = p->sz;
-
+  
   // copy saved user registers.
   *(np->trapframe) = *(p->trapframe);
-
+  np->mask = p->mask;
   // Cause fork to return 0 in the child.
   np->trapframe->a0 = 0;
 
@@ -302,7 +302,7 @@ fork(void)
   np->cwd = idup(p->cwd);
 
   safestrcpy(np->name, p->name, sizeof(p->name));
-
+   
   pid = np->pid;
 
   release(&np->lock);
@@ -654,3 +654,25 @@ procdump(void)
     printf("\n");
   }
 }
+
+// This is a function that count the processes whose state is not UNUSED
+uint64
+nproc(void)
+{
+	struct proc *p; // in order to transver all the processes
+	uint64 num = 0; // record the num of processes above
+	for(p = proc; p<&proc[NPROC];p++) // from the beginning of the array
+	{
+		acquire(&p->lock);  //here need the lock
+		if(p->state != UNUSED)
+		{
+			num++;    //the num of processes abouv can plus one
+		}
+		release(&p->lock);
+	}
+	return num;
+}
+
+
+
+
