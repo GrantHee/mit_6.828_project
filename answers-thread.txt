@@ -1,0 +1,9 @@
+The reason for losing keys when using 2 threads is due to a race condition in the put() function in the notxv6/ph.c file. The following is the sequence of events that may cause key loss:
+
+1.Thread 1 and Thread 2 execute the put() function at the same time.
+2.Thread 1 and Thread 2 read the index position in the hash table at the same time to determine where to insert the key.
+3.Thread 1 calculates the position to insert the key first and attempts to insert it into the hash table.
+4.Before Thread 1 attempts to insert the key, Thread 2 also calculates the position to insert the key and attempts to insert it into the hash table.
+5.Thread 2 successfully inserts the key into the hash table and updates the key at that position in the hash table.
+6.Thread 1 attempts to insert the key into the hash table, but since Thread 2 has already inserted a key, Thread 1's key is overwritten or lost.
+7.This race condition is caused by multiple threads accessing a shared hash table data structure simultaneously. Without locks, two threads can read and modify the state of the hash table at the same time, resulting in key loss.
