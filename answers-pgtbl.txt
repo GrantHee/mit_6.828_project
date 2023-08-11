@@ -1,33 +1,7 @@
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
-hello world hello world hello world hello world hello world
+1. It may be speed up 'fork()' system call, because the children which need parent page can directly call the page.
+2.  page0: date and text of process
+    page1: guard page for protect stack by present page0 overflow
+    page2: stack of process
+    page3 to last page: heap, trapfram, trampoline
+
+    page1 can't be read or written by users because it's used to protect page2 from be read or written by users
